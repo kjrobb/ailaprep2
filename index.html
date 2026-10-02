@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AILA Interview Command Center | Real-Time Cheat Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ------------------------------------------------------------------
+       CSS VARIABLES & THEME (Light Mode, High Contrast, Ultra Density)
+       ------------------------------------------------------------------ */
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-accent: #cbd5e1;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+
+      /* Semantic Color Palette */
+      --brand-blue: #1e3a8a;
+      --brand-blue-bg: #eff6ff;
+      --accent-stat: #047857;
+      --accent-stat-bg: #ecfdf5;
+      --accent-policy: #b45309;
+      --accent-policy-bg: #fffbeb;
+      --accent-alert: #be123c;
+      --accent-alert-bg: #fff1f2;
+      --accent-purple: #6b21a8;
+      --accent-purple-bg: #faf5ff;
+
+      --font-stack: 'Inter', 'Aptos', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 10px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ------------------------------------------------------------------
+       HEADER & CONTROL BAR
+       ------------------------------------------------------------------ */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .title-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title-area h1 {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--brand-blue);
+      text-transform: uppercase;
+    }
+
+    .tag-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--brand-blue-bg);
+      color: var(--brand-blue);
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Category Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--brand-blue);
+      color: #ffffff;
+      border-color: var(--brand-blue);
+    }
+
+    .search-box {
+      position: relative;
+      width: 250px;
+      max-width: 100%;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 6px 10px 6px 28px;
+      font-size: 12px;
+      border: 1px solid var(--border-accent);
+      border-radius: 4px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    .search-box input:focus {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* ------------------------------------------------------------------
+       DENSE GRID LAYOUT (4 Responsive Columns)
+       ------------------------------------------------------------------ */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+
+    @media (max-width: 1300px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ------------------------------------------------------------------
+       CARD & SOUNDBITE STYLING
+       ------------------------------------------------------------------ */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      border-bottom: 1.5px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title.blue { color: var(--brand-blue); border-bottom-color: #93c5fd; }
+    .card-title.green { color: var(--accent-stat); border-bottom-color: #6ee7b7; }
+    .card-title.amber { color: var(--accent-policy); border-bottom-color: #fcd34d; }
+    .card-title.red { color: var(--accent-alert); border-bottom-color: #fca5a5; }
+    .card-title.purple { color: var(--accent-purple); border-bottom-color: #d8b4fe; }
+
+    /* Interactive Click-to-Copy Chips */
+    .soundbite-chip {
+      background: var(--brand-blue-bg);
+      border: 1px dashed #93c5fd;
+      border-radius: 4px;
+      padding: 6px 8px;
+      margin-top: 5px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .soundbite-chip:hover {
+      background: #dbeafe;
+      border-color: #3b82f6;
+    }
+
+    .soundbite-chip.purple-chip {
+      background: var(--accent-purple-bg);
+      border-color: #c084fc;
+    }
+
+    .soundbite-chip.purple-chip:hover {
+      background: #f3e8ff;
+      border-color: #a855f7;
+    }
+
+    .soundbite-chip.green-chip {
+      background: var(--accent-stat-bg);
+      border-color: #6ee7b7;
+    }
+
+    .soundbite-chip.green-chip:hover {
+      background: #d1fae5;
+      border-color: #10b981;
+    }
+
+    .soundbite-chip.amber-chip {
+      background: var(--accent-policy-bg);
+      border-color: #fcd34d;
+    }
+
+    .soundbite-chip.amber-chip:hover {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+
+    .soundbite-chip p {
+      font-size: 11.5px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--text-main);
+    }
+
+    .soundbite-chip .q-title {
+      font-weight: 800;
+      color: var(--brand-blue);
+      margin-bottom: 2px;
+      font-size: 11.5px;
+      display: block;
+    }
+
+    .soundbite-chip.purple-chip .q-title { color: var(--accent-purple); }
+    .soundbite-chip.green-chip .q-title { color: var(--accent-stat); }
+    .soundbite-chip.amber-chip .q-title { color: var(--accent-policy); }
+
+    .soundbite-hint {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #3b82f6;
+      text-transform: uppercase;
+      margin-top: 3px;
+      display: inline-block;
+    }
+
+    .soundbite-chip.purple-chip .soundbite-hint { color: #9333ea; }
+    .soundbite-chip.green-chip .soundbite-hint { color: #059669; }
+    .soundbite-chip.amber-chip .soundbite-hint { color: #d97706; }
+
+    /* Key-Value Displays & Lists */
+    .kv-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3px 8px;
+      font-size: 11.5px;
+    }
+
+    .kv-label {
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .kv-val {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    ul.atomic-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 11.5px;
+    }
+
+    ul.atomic-list li {
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    ul.atomic-list li::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: var(--brand-blue);
+      font-weight: bold;
+    }
+
+    /* Comparison & Dense Data Tables */
+    table.pivot-table, table.dense-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    table.pivot-table th, table.dense-table th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 3px 5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 1.5px solid var(--border-accent);
+    }
+
+    table.pivot-table td, table.dense-table td {
+      padding: 4px 5px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    table.pivot-table tr:hover, table.dense-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .ops-text {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      text-decoration-color: #f87171;
+    }
+
+    .mktg-text {
+      color: var(--accent-stat);
+      font-weight: 700;
+    }
+
+    .highlight {
+      background-color: #fef08a;
+      color: #000;
+      font-weight: bold;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER & CONTROLS -->
+  <header>
+    <div class="title-area">
+      <h1>AILA Interview Command Center</h1>
+      <span class="tag-badge">4th Round • Dir. of Membership</span>
+    </div>
+
+    <!-- Quick Category Filter Pills -->
+    <div class="filter-tabs">
+      <button class="tab-btn active" onclick="filterCategory('all', this)">All Cards</button>
+      <button class="tab-btn" onclick="filterCategory('mission-pitch', this)">🚀 Career Throughline & Elevator Pitch</button>
+      <button class="tab-btn" onclick="filterCategory('adv-frames', this)">⚡ 3 Advanced Frames</button>
+      <button class="tab-btn" onclick="filterCategory('star-wins', this)">⭐ STAR Masterclass Wins</button>
+      <button class="tab-btn" onclick="filterCategory('director-qa', this)">❓ Questions for Director</button>
+      <button class="tab-btn" onclick="filterCategory('aila-dna', this)">🏛️ AILA Core DNA & Value Ecosystem</button>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search keywords (e.g., Kurzban, VoC, 42%, Oregonian)..." onkeyup="filterContent()">
+    </div>
+  </header>
+
+  <!-- ANTI-RAMBLING GUARDRAIL BANNER -->
+  <div style="background: #fff1f2; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 14px;">⏱️</span>
+      <span style="font-weight: 800; color: #9f1239; font-size: 10px; text-transform: uppercase;">
+        Anti-Rambling Rule (Stop talking at ~20-25 secs):
+      </span>
+      <span style="color: #881337; font-weight: 600; font-size: 10px;">
+        1. Context Hook (1 sentence) ➔ 2. Modern Action/Strategy (1 sentence) ➔ 3. Hard Metric Result (1 sentence) ➔ STOP.
+      </span>
+    </div>
+    <span style="background: #be123c; color: white; padding: 2px 6px; border-radius: 3px; font-weight: 800; font-size: 9px;">MAX 3 SENTENCES</span>
+  </div>
+
+  <!-- 4-COLUMN DASHBOARD GRID -->
+  <div class="grid-container" id="contentGrid">
+
+    <!-- COLUMN 1: CAREER THROUGHLINE, ELEVATOR PITCH & CORE THESIS -->
+    <div class="column">
+      
+      <!-- 30-Second Elevator Pitch -->
+      <div class="card" data-category="mission-pitch">
+        <div class="card-title blue">
+          <span>⚡ 30-Second Executive Elevator Pitch</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip" onclick="copySoundbite('AILA is the premier national bar association for over 18,000 immigration law practitioners, founded in 1946. They sit at the exact intersection of member services (CLEs, 24 active listservs, 65+ Message Center forums, Kurzban\'s and AILALink), government agency liaison work (direct channels with USCIS, EOIR, ICE, CBP, DOS), and national policy advocacy pushing for Article I court independence and backlog reduction.')">
+          <p>"AILA is the premier national bar association for over 18,000 immigration law practitioners, founded in 1946. They sit at the exact intersection of member services (CLEs, 24 active listservs, Kurzban's and AILALink), government agency liaison work (USCIS, EOIR, ICE, CBP, DOS), and national policy advocacy."</p>
+          <span class="soundbite-hint">📋 Copy Elevator Pitch</span>
+        </div>
+      </div>
+
+      <!-- Mission-Driven Career Throughline ("Why AILA?") -->
+      <div class="card" data-category="mission-pitch">
+        <div class="card-title purple">
+          <span>🏛️ Mission-Driven Career Throughline ("Why AILA?")</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip purple-chip" onclick="copySoundbite('I\'ve spent most of my career helping mission-driven organizations keep their value relevant as their audiences and the world around them change. At The Oregonian, that meant journalism and civic connection. At MAC, it meant lifelong health and generational belonging. At AILA, I see the opportunity as making sure members continually understand why the organization is essential to their practice—through trusted information, advocacy, professional resources, and community. I\'m strongest at identifying where the customer relationship is changing, then building the strategy that keeps the brand relevant and the business healthy.')">
+          <span class="q-title">Oregonian ➔ MAC ➔ AILA Narrative</span>
+          <p>"I've spent most of my career helping mission-driven organizations keep their value relevant as their audiences change. At <b>The Oregonian</b>, that meant journalism and civic connection. At <b>MAC</b>, it meant lifelong health and generational belonging. At <b>AILA</b>, the opportunity is making sure members continually understand why AILA is essential to their practice—through trusted information, advocacy, resources, and community. <b>I’m strongest at identifying where the customer relationship is changing, then building the strategy that keeps the brand relevant and the business healthy.</b>"</p>
+          <span class="soundbite-hint">📋 Copy Signature "Why AILA?" Response</span>
+        </div>
+      </div>
+
+      <!-- Core AILA Thesis & Mental Model -->
+      <div class="card" data-category="mission-pitch">
+        <div class="card-title green">
+          <span>💡 Core AILA Thesis & 4-Part Mental Model</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('AILA already has enormous member value. The marketing opportunity is making that value visible, relevant and connected throughout the lifecycle: Information, Access, Advocacy, and Community.')">
+          <p><b>Core Thesis:</b> "AILA already has enormous member value. The marketing opportunity is making that value visible, relevant and connected throughout the lifecycle."</p>
+          <span class="soundbite-hint">📋 Copy Core Thesis</span>
+        </div>
+        <ul class="atomic-list" style="margin-top: 6px;">
+          <li><b>1. Information:</b> Kurzban's Sourcebook, AILALink, Fastcase, Ethics guides.</li>
+          <li><b>2. Access:</b> Direct agency liaisons (USCIS, EOIR, ICE, CBP, DOS) & practice alerts.</li>
+          <li><b>3. Advocacy:</b> Article I court independence, backlog reduction, due process.</li>
+          <li><b>4. Community:</b> 24 Listservs, 65+ Message Center forums, 39 Chapters, Mentorship.</li>
+        </ul>
+      </div>
+
+      <!-- Operations vs Marketing Vocabulary Re-write Matrix -->
+      <div class="card" data-category="mission-pitch">
+        <div class="card-title amber">
+          <span>🛠️ Vocabulary Rewrite Dictionary (Closed-Loop Statements)</span>
+        </div>
+        <table class="pivot-table">
+          <thead>
+            <tr>
+              <th>Instead of Saying (Ops)...</th>
+              <th>Say This Instead (Strategy + Result)...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="ops-text">"I handled the renewal process..."</td>
+              <td class="mktg-text">"I audited the renewal sequence and deployed automated behavioral onboarding triggers, cutting non-use churn by 10%."</td>
+            </tr>
+            <tr>
+              <td class="ops-text">"I managed member data and lists..."</td>
+              <td class="mktg-text">"I built audience segmentation models based on practice focus, driving a 20% higher conversion rate on targeted non-dues CLE campaigns."</td>
+            </tr>
+            <tr>
+              <td class="ops-text">"I promoted our annual conference..."</td>
+              <td class="mktg-text">"I executed an omni-channel event lifecycle strategy linking regulatory alerts to seminar registration, maximizing non-dues revenue."</td>
+            </tr>
+            <tr>
+              <td class="ops-text">"I listened to member complaints..."</td>
+              <td class="mktg-text">"I synthesized Voice-of-Customer disengagement signals to build an upstream retention workflow, preserving $35M in recurring dues."</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- COLUMN 2: ADVANCED 4TH-ROUND FRAMES & STRATEGIC PITCHES -->
+    <div class="column">
+
+      <!-- Frame 1: Data-Driven Customer Journey -->
+      <div class="card" data-category="adv-frames">
+        <div class="card-title blue">
+          <span>⚡ Frame 1: Data-Driven Customer Journey</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip" onclick="copySoundbite('In my 8 years of membership experience, I\'ve seen organizations treat onboarding as an operational checklist—sending a welcome kit and a login link. I treat onboarding as a dynamic, behavior-triggered customer journey. If an AILA member downloads an immigration form but hasn\'t joined their local chapter listserv within 30 days, I design automated nurture tracks that dynamically serve them chapter benefits based on real-time engagement data.')">
+          <span class="q-title">Behavioral Triggers vs Manual Checklist</span>
+          <p>"In my 8 years of membership, I've seen organizations treat onboarding as an operational checklist. I treat onboarding as a dynamic, behavior-triggered customer journey. If an AILA member downloads a form but hasn't joined their chapter listserv in 30 days, we automatically trigger targeted nurture tracks that serve them chapter benefits based on engagement data."</p>
+          <span class="soundbite-hint">📋 Copy Frame 1 Pitch</span>
+        </div>
+      </div>
+
+      <!-- Frame 2: Turning Customer Service into VoC Marketing -->
+      <div class="card" data-category="adv-frames">
+        <div class="card-title purple">
+          <span>🗣️ Frame 2: Customer Service ➔ Voice of Customer (VoC) Copy</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip purple-chip" onclick="copySoundbite('Having managed membership, I know exactly what keeps a member awake at night, what frustrates them about technology, and why they choose to cancel. I don\'t view feedback merely as an operational problem to solve; I view it as Voice-of-Customer data. I use that real-world language to write high-converting copy, marketing the exact compliance safety lines immigration attorneys are actively looking for.')">
+          <span class="q-title">Real Member Language as Copy Asset</span>
+          <p>"Having managed membership, I know what keeps members awake at night and why they cancel. I view feedback as Voice-of-Customer (VoC) data. I use that real-world language to write high-converting copy—focusing on the exact compliance safety lines and practical answers immigration attorneys are actively seeking."</p>
+          <span class="soundbite-hint">📋 Copy Frame 2 Pitch</span>
+        </div>
+      </div>
+
+      <!-- Frame 3: Growth Marketing vs Admin Oversight -->
+      <div class="card" data-category="adv-frames">
+        <div class="card-title green">
+          <span>📈 Frame 3: Growth Marketing Engine vs Admin Roster</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('While I understand the administrative framework of an association inside and out, my focus as Senior Marketing Manager is driving the modern marketing engine. I don\'t look at our database as an administrative roster; I view it as a growth pipeline. My goal is to build automated systems—leveraging segmentation, lead scoring, and automated campaigns—so our marketing tech stack scales acquisition and engagement seamlessly.')">
+          <span class="q-title">Database as Growth Pipeline</span>
+          <p>"While I understand association administration, my focus is driving the marketing engine. I don't look at our database as an administrative roster; I view it as a growth pipeline. My goal is to build automated systems—using segmentation and lead scoring—so our tech stack scales acquisition and engagement."</p>
+          <span class="soundbite-hint">📋 Copy Frame 3 Pitch</span>
+        </div>
+      </div>
+
+      <!-- 4 Strategic Director Pitches -->
+      <div class="card" data-category="adv-frames">
+        <div class="card-title amber">
+          <span>🎯 Strategic Directors Pitch Checklist</span>
+        </div>
+        <ul class="atomic-list">
+          <li><b>Lifecycle & Churn:</b> Shift AILA's vast toolkit (chapter listservs, 65+ Message Center forums) into automated 90-day onboarding lifecycles to prove value before renewal time.</li>
+          <li><b>Essential Value Position:</b> Position AILA as an essential practice shield using real-time policy alerts as data-driven, urgent hooks for win-back campaigns.</li>
+          <li><b>Non-Dues Product Marketing:</b> Trigger automated campaigns for CLE web seminars or books when members engage with specific forum topics like Crimmigration or ethics.</li>
+          <li><b>Mission & Community:</b> Bring member testimonials to the forefront, turning peer solidarity into human-centric content marketing.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- COLUMN 3: CANNED INTERVIEW ANSWERS & STAR MARKETING MASTERCLASS WINS -->
+    <div class="column">
+
+      <!-- STAR Method Marketing Masterclass Win -->
+      <div class="card" data-category="star-wins">
+        <div class="card-title green">
+          <span>⭐ STAR Masterclass: Mid-Career Retention Turnaround</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('Facing a drop in mid-career renewals, I took a growth-marketing approach. I audited our CRM to isolate the persona and built an automated multi-channel re-engagement track using Voice-of-Customer insights to rewrite the copy around professional developments. The campaign achieved a 42% open rate—a 15% lift over baseline—converted 12% of lapsed accounts, and generated $45,000 in non-dues revenue.')">
+          <span class="q-title">42% Open Rate | 12% Conversion | $45K Non-Dues</span>
+          <p><b>STAR Win:</b> "Facing mid-career renewal drops, I audited CRM data to isolate the persona and launched a 4-part automated nurture track. Using VoC insights, I rewrote messaging around hyper-specific professional developments. The campaign reached a <b>42% open rate (+15%)</b>, converted <b>12% of lapsed accounts</b>, and generated <b>$45,000 in non-dues revenue</b>."</p>
+          <span class="soundbite-hint">📋 Copy STAR Masterclass Story</span>
+        </div>
+      </div>
+
+      <!-- Canned Short Answers -->
+      <div class="card" data-category="star-wins">
+        <div class="card-title blue">
+          <span>💬 "Tell Me About Yourself"</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip" onclick="copySoundbite('My career sits at the intersection of marketing, membership and operations. At MAC, I led work across the full member lifecycle for about 22,000 members, from acquisition and onboarding through engagement and retention. I\'m strongest at seeing the whole system, finding where the opportunity is, and turning that into a practical strategy.')">
+          <p>"My career sits at the intersection of marketing, membership, and operations. At MAC, I led work across the full lifecycle for 22,000 members—from acquisition and onboarding through engagement and retention. I'm strongest at seeing the whole system and turning opportunity into strategy."</p>
+          <span class="soundbite-hint">📋 Copy Response</span>
+        </div>
+      </div>
+
+      <div class="card" data-category="star-wins">
+        <div class="card-title green">
+          <span>💬 "How Do You Think About Retention?"</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('I think retention starts long before someone decides to leave. At MAC, we used changes in engagement and resignation reasons to identify addressable attrition earlier. In one test period, that work reduced non-use resignations by about 10%.')">
+          <span class="q-title">WIN: Reduced Non-Use Churn by 10%</span>
+          <p>"Retention starts long before someone decides to leave. At MAC, we used engagement drops to spot addressable attrition early. In one test period, early behavioral interventions reduced non-use resignations by 10%."</p>
+          <span class="soundbite-hint">📋 Copy Retention Response</span>
+        </div>
+      </div>
+
+      <div class="card" data-category="star-wins">
+        <div class="card-title green">
+          <span>💬 "Tell Me About Something You Improved"</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('I stopped treating onboarding like a one-time orientation and redesigned it as a 12-month experience. We introduced information when it became relevant to the member, instead of front-loading everything. Open rates rose from about 60% to 80%, and new-member event participation roughly doubled.')">
+          <span class="q-title">WIN: 12-Mo Onboarding (60%➔80% Open Rate)</span>
+          <p>"I stopped treating onboarding as a one-time orientation and redesigned it as a 12-month journey. Open rates rose from 60% to 80%, and new-member gathering participation roughly doubled from 18-20 to 40-50 people."</p>
+          <span class="soundbite-hint">📋 Copy Onboarding Response</span>
+        </div>
+      </div>
+
+      <div class="card" data-category="star-wins">
+        <div class="card-title green">
+          <span>💬 "Tell Me About a Growth/Conversion Problem"</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip green-chip" onclick="copySoundbite('We realized we didn\'t have a demand problem. We had a conversion problem. I identified where prospects were stalling, strengthened stage-based follow-up and proposer engagement, and conversion increased from roughly 75% to 95%.')">
+          <span class="q-title">WIN: Conversion Jumped 75% ➔ 95%</span>
+          <p>"We didn't have a demand problem; we had a conversion problem. I identified where prospects stalled, created a Proposer Recognition Program, and conversion increased from 75% to 95%."</p>
+          <span class="soundbite-hint">📋 Copy Conversion Response</span>
+        </div>
+      </div>
+
+      <div class="card" data-category="star-wins">
+        <div class="card-title purple">
+          <span>💬 "How Would You Work With Me (Director)?"</span>
+          <span>CLICK TO COPY</span>
+        </div>
+        <div class="soundbite-chip purple-chip" onclick="copySoundbite('I\'d want us aligned on the member problem and the business outcome before we get into tactics. Membership brings deep member and product knowledge, and Marketing turns that into audience strategy, messaging and measurable interventions. I\'d want us looking at the same data and making those decisions together.')">
+          <span class="q-title">Joint Data Rhythm & Partnership</span>
+          <p>"I'd want us aligned on the member problem and business outcome before tactics. Membership brings deep operational insights; Marketing turns that into audience strategy and journeys. We should look at the same data in a joint rhythm."</p>
+          <span class="soundbite-hint">📋 Copy Alignment Answer</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLUMN 4: DIRECTOR QUESTIONS, STAKEHOLDER INTEL & AILA ECOSYSTEM -->
+    <div class="column">
+
+      <!-- Proactive Questions to Ask Director of Membership -->
+      <div class="card" data-category="director-qa">
+        <div class="card-title red">
+          <span>❓ Proactive Questions for Director of Membership</span>
+          <span>CLICK TO COPY</span>
+        </div>
+
+        <div class="soundbite-chip" onclick="copySoundbite('As Director, when you look at our current membership lifecycle funnel, where do you see the biggest drop-off—is it turning prospects into first-year members, or retaining members from year one to year two?')">
+          <span class="q-title">Q1: Funnel Drop-off Location</span>
+          <p>"When you look at our membership lifecycle funnel, where do you see the biggest drop-off—is it converting prospects into year 1, or retaining year 1 to year 2?"</p>
+          <span class="soundbite-hint">📋 Copy Funnel Question</span>
+        </div>
+
+        <div class="soundbite-chip" onclick="copySoundbite('AILA has incredible assets like the Daily Newsletter, Kurzban\'s, and over 65 Message Center forums. From a marketing tech stack perspective, how closely are we currently tying member behavior within those platforms to our automated marketing triggers?')">
+          <span class="q-title">Q2: Marketing Tech Stack & Behavioral Triggers</span>
+          <p>"AILA has incredible assets like Kurzban's and 65+ Message Center forums. How closely are we currently tying member behavior inside those platforms to automated marketing triggers?"</p>
+          <span class="soundbite-hint">📋 Copy Tech Stack Question</span>
+        </div>
+
+        <div class="soundbite-chip" onclick="copySoundbite('How can the marketing team best support your top membership growth and retention goals over the next two quarters?')">
+          <span class="q-title">Q3: Supporting Top 2-Quarter Goals</span>
+          <p>"How can the marketing team best support your top membership growth and retention goals over the next two quarters?"</p>
+          <span class="soundbite-hint">📋 Copy Growth Support Question</span>
+        </div>
+      </div>
+
+      <!-- Strategic Questions for Scott MacKenzie -->
+      <div class="card" data-category="director-qa">
+        <div class="card-title amber">
+          <span>⚡ Questions for Scott MacKenzie</span>
+          <span>CLICK TO COPY</span>
+        </div>
+
+        <div class="soundbite-chip amber-chip" onclick="copySoundbite('From your side of the Membership function, where do you most need this role to create leverage for you?')">
+          <span class="q-title">Q1: Membership Leverage Point</span>
+          <p>"From your side of the Membership function, where do you most need this role to create leverage for you?"</p>
+          <span class="soundbite-hint">📋 Copy Question</span>
+        </div>
+
+        <div class="soundbite-chip amber-chip" onclick="copySoundbite('What member behaviors or signals do you trust most today as early indicators of engagement or disengagement?')">
+          <span class="q-title">Q2: Early Indicators of Engagement</span>
+          <p>"What member behaviors or signals do you trust most today as early indicators of engagement or disengagement?"</p>
+          <span class="soundbite-hint">📋 Copy Question</span>
+        </div>
+
+        <div class="soundbite-chip amber-chip" onclick="copySoundbite('Janet talked about this role helping tie the larger membership-value story together. If you and I were working extremely well together six months from now, what would be different about how Membership and Marketing operate?')">
+          <span class="q-title">Q3: 6-Month Partnership Vision</span>
+          <p>"Janet talked about this role helping tie the larger membership-value story together. If you and I were working extremely well together six months from now, what would be different about how Membership and Marketing operate?"</p>
+          <span class="soundbite-hint">📋 Copy Question</span>
+        </div>
+
+        <div class="soundbite-chip amber-chip" onclick="copySoundbite('I noticed you’ve been at AILA for about six months. Now that you’ve had time to get inside the membership program, what have you learned so far, and what has surprised you most about the opportunities or challenges?')">
+          <span class="q-title">Q4: 6-Month Learnings & Surprises</span>
+          <p>"I noticed you’ve been at AILA for about six months. Now that you’ve had time to get inside the membership program, what have you learned so far, and what has surprised you most about the opportunities or challenges?"</p>
+          <span class="soundbite-hint">📋 Copy Question</span>
+        </div>
+      </div>
+
+      <!-- Stakeholder Intelligence Synthesis (Mark, Mary, Janet) -->
+      <div class="card" data-category="aila-dna">
+        <div class="card-title purple">
+          <span>💡 Stakeholder Intelligence (Mark, Mary, Janet)</span>
+          <span>CLICK TO COPY SYNTHESIS</span>
+        </div>
+
+        <div class="soundbite-chip purple-chip" onclick="copySoundbite('The picture I\'m getting from Mark, Mary, and Janet is that AILA has already strengthened product marketing. The next opportunity is to build a more intentional membership lifecycle around it: Membership and Marketing working from the same member insight, using data to understand what drives value and retention, and connecting AILA\'s many resources into one coherent member relationship.')">
+          <span class="q-title">Executive Synthesis Soundbite</span>
+          <p>"The picture I'm getting is that AILA has already strengthened product marketing. The next opportunity is building an intentional lifecycle around it: Membership and Marketing working from shared data to connect AILA's resources into one coherent value story."</p>
+          <span class="soundbite-hint">📋 Copy Executive Synthesis</span>
+        </div>
+      </div>
+
+      <!-- Full AILA Value Ecosystem & Assets -->
+      <div class="card" data-category="aila-dna">
+        <div class="card-title blue">
+          <span>🏛️ AILA Value Ecosystem & Unrivaled Assets</span>
+        </div>
+        <div class="kv-grid">
+          <span class="kv-label">Legal Reference:</span>
+          <span class="kv-val">Kurzban's Sourcebook ("the bible") + AILALink</span>
+
+          <span class="kv-label">Agency Access:</span>
+          <span class="kv-val">Direct liaisons: USCIS, EOIR, ICE, CBP, DOS</span>
+
+          <span class="kv-label">Community:</span>
+          <span class="kv-val">24 Listservs | 65+ Message Center forums</span>
+
+          <span class="kv-label">Reach:</span>
+          <span class="kv-val">39 Regional Chapters | 27 Interest Groups</span>
+
+          <span class="kv-label">501(c)(3) Arm:</span>
+          <span class="kv-val">American Immigration Council</span>
+
+          <span class="kv-label">Top Policy Pushes:</span>
+          <span class="kv-val">Article I Courts, Backlog Reduction, Due Process</span>
+        </div>
+      </div>
+
+      <!-- Membership Dues Matrix -->
+      <div class="card" data-category="aila-dna">
+        <div class="card-title green">
+          <span>💳 Tiered Dues Architecture</span>
+        </div>
+        <table class="dense-table">
+          <thead>
+            <tr>
+              <th>Tier / Category</th>
+              <th>Tenure / Role</th>
+              <th>Annual Dues</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Regular</b></td>
+              <td>1st Year</td>
+              <td><b>$216</b></td>
+            </tr>
+            <tr>
+              <td><b>Regular</b></td>
+              <td>Years 2–3 / 4–5</td>
+              <td>$351 / $481</td>
+            </tr>
+            <tr>
+              <td><b>Regular</b></td>
+              <td>15+ Years</td>
+              <td><b>$643</b></td>
+            </tr>
+            <tr>
+              <td><b>Nonprofit</b></td>
+              <td>Full-time 501c3</td>
+              <td><b>$162</b></td>
+            </tr>
+            <tr>
+              <td><b>Student</b></td>
+              <td>Accredited Law</td>
+              <td><span style="color:var(--accent-stat); font-weight:bold;">FREE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Major Annual Events -->
+      <div class="card" data-category="aila-dna">
+        <div class="card-title amber">
+          <span>🗓️ Major Annual Event Calendar</span>
+        </div>
+        <table class="dense-table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Month</th>
+              <th>Focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Annual Conf</b></td>
+              <td>June</td>
+              <td>Flagship event (100+ CLEs)</td>
+            </tr>
+            <tr>
+              <td><b>Day of Action</b></td>
+              <td>April (Spring)</td>
+              <td>Capitol Hill lobbying</td>
+            </tr>
+            <tr>
+              <td><b>Fall Conf</b></td>
+              <td>Oct/Nov</td>
+              <td>Business, PERM, H-1B</td>
+            </tr>
+            <tr>
+              <td><b>Litigation Inst</b></td>
+              <td>Jan/Feb</td>
+              <td>APA suits & federal court</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast">Copied soundbite to clipboard!</div>
+
+  <!-- JAVASCRIPT FOR CATEGORY FILTERING, SEARCH, AND CLIPBOARD COPY -->
+  <script>
+    /* Category Filter Buttons */
+    function filterCategory(cat, btnElement) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    /* Robust Copy to Clipboard with fallback for iframe contexts */
+    function copySoundbite(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(showToast)
+          .catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.top = '0';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast();
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    /* Real-Time Search Filter & Text Highlighting */
+    function filterContent() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (query === '' || text.includes(query)) {
+          card.style.display = '';
+          removeHighlights(card);
+          if (query !== '') {
+            applyHighlights(card, query);
+          }
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function removeHighlights(element) {
+      const highlights = element.querySelectorAll('.highlight');
+      highlights.forEach(h => {
+        const parent = h.parentNode;
+        parent.replaceChild(document.createTextNode(h.textContent), h);
+        parent.normalize();
+      });
+    }
+
+    function applyHighlights(element, query) {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+      const nodesToReplace = [];
+
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (
+          node.parentNode.tagName !== 'SCRIPT' && 
+          node.parentNode.tagName !== 'STYLE' && 
+          !node.parentNode.classList.contains('highlight')
+        ) {
+          if (node.nodeValue.toLowerCase().includes(query)) {
+            nodesToReplace.push(node);
+          }
+        }
+      }
+
+      nodesToReplace.forEach(node => {
+        const parent = node.parentNode;
+        const val = node.nodeValue;
+        const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+        const frag = document.createDocumentFragment();
+        let lastIdx = 0;
+
+        val.replace(regex, (match, p1, offset) => {
+          frag.appendChild(document.createTextNode(val.substring(lastIdx, offset)));
+          const span = document.createElement('span');
+          span.className = 'highlight';
+          span.textContent = match;
+          frag.appendChild(span);
+          lastIdx = offset + match.length;
+        });
+
+        frag.appendChild(document.createTextNode(val.substring(lastIdx)));
+        parent.replaceChild(frag, node);
+      });
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+  </script>
+</body>
+</html>
